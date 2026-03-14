@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SlideFlow</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e94560">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SlideFlow">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Source+Code+Pro:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <!-- Top Toolbar -->
+  <header id="toolbar">
+    <div class="toolbar-left">
+      <button id="menuBtn" class="icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
+      <span class="app-title">SlideFlow</span>
+    </div>
+    <div class="toolbar-center">
+      <button id="undoBtn" class="icon-btn" title="Undo (Ctrl+Z)" disabled><i class="fas fa-undo"></i></button>
+      <button id="redoBtn" class="icon-btn" title="Redo (Ctrl+Y)" disabled><i class="fas fa-redo"></i></button>
+      <div class="toolbar-sep"></div>
+      <button id="addTextBtn" class="tool-btn" title="Add Text"><i class="fas fa-font"></i><span class="btn-label">Text</span></button>
+      <button id="addImageBtn" class="tool-btn" title="Add Image"><i class="fas fa-image"></i><span class="btn-label">Image</span></button>
+      <button id="addShapeBtn" class="tool-btn has-dropdown" title="Add Shape"><i class="fas fa-shapes"></i><span class="btn-label">Shape</span><i class="fas fa-caret-down drop-arrow"></i></button>
+      <button id="addLineBtn" class="tool-btn has-dropdown" title="Add Line"><i class="fas fa-minus"></i><span class="btn-label">Line</span><i class="fas fa-caret-down drop-arrow"></i></button>
+      <button id="addTableBtn" class="tool-btn" title="Add Table"><i class="fas fa-table"></i><span class="btn-label">Table</span></button>
+      <button id="addLinkBtn" class="tool-btn" title="Add Link"><i class="fas fa-link"></i><span class="btn-label">Link</span></button>
+      <button id="addGifBtn" class="tool-btn" title="Add GIF"><i class="fas fa-film"></i><span class="btn-label">GIF</span></button>
+    </div>
+    <div class="toolbar-right">
+      <button id="slideSizeBtn" class="icon-btn" title="Slide Size"><i class="fas fa-expand"></i></button>
+      <button id="playBtn" class="play-btn" title="Present"><i class="fas fa-play"></i><span class="btn-label">Present</span></button>
+    </div>
+  </header>
+
+  <!-- Shape Dropdown -->
+  <div id="shapeDropdown" class="dropdown-menu hidden">
+    <button data-shape="rect"><i class="fas fa-square"></i> Rectangle</button>
+    <button data-shape="circle"><i class="fas fa-circle"></i> Circle</button>
+    <button data-shape="triangle"><i class="fas fa-play fa-rotate-270"></i> Triangle</button>
+    <button data-shape="diamond"><i class="fas fa-diamond"></i> Diamond</button>
+    <button data-shape="star"><i class="fas fa-star"></i> Star</button>
+    <button data-shape="arrow-right"><i class="fas fa-arrow-right"></i> Arrow</button>
+    <button data-shape="hexagon"><i class="fas fa-hexagon-nodes"></i> Hexagon</button>
+    <button data-shape="rounded-rect"><i class="fas fa-square"></i> Rounded Rect</button>
+  </div>
+
+  <!-- Line Dropdown -->
+  <div id="lineDropdown" class="dropdown-menu hidden">
+    <button data-line="straight"><i class="fas fa-minus"></i> Straight Line</button>
+    <button data-line="arrow"><i class="fas fa-long-arrow-alt-right"></i> Arrow</button>
+    <button data-line="double-arrow"><i class="fas fa-arrows-alt-h"></i> Double Arrow</button>
+    <button data-line="dashed"><i class="fas fa-ellipsis-h"></i> Dashed Line</button>
+  </div>
+
+  <!-- Format Toolbar (appears when element selected) -->
+  <div id="formatBar" class="format-bar hidden">
+    <select id="fontFamily" title="Font">
+      <option value="Inter">Inter</option>
+      <option value="Roboto">Roboto</option>
+      <option value="Open Sans">Open Sans</option>
+      <option value="Lato">Lato</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Raleway">Raleway</option>
+      <option value="Playfair Display">Playfair Display</option>
+      <option value="Merriweather">Merriweather</option>
+      <option value="Oswald">Oswald</option>
+      <option value="Source Code Pro">Source Code Pro</option>
+      <option value="Pacifico">Pacifico</option>
+      <option value="Arial">Arial</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Comic Sans MS">Comic Sans MS</option>
+    </select>
+    <select id="fontSize" title="Font Size">
+      <option value="10">10</option>
+      <option value="12">12</option>
+      <option value="14">14</option>
+      <option value="16">16</option>
+      <option value="18">18</option>
+      <option value="20">20</option>
+      <option value="24" selected>24</option>
+      <option value="28">28</option>
+      <option value="32">32</option>
+      <option value="36">36</option>
+      <option value="42">42</option>
+      <option value="48">48</option>
+      <option value="56">56</option>
+      <option value="64">64</option>
+      <option value="72">72</option>
+      <option value="96">96</option>
+    </select>
+    <button id="boldBtn" class="fmt-btn" title="Bold"><i class="fas fa-bold"></i></button>
+    <button id="italicBtn" class="fmt-btn" title="Italic"><i class="fas fa-italic"></i></button>
+    <button id="underlineBtn" class="fmt-btn" title="Underline"><i class="fas fa-underline"></i></button>
+    <div class="toolbar-sep"></div>
+    <div class="color-pick">
+      <label title="Text Color"><i class="fas fa-palette"></i></label>
+      <input type="color" id="textColor" value="#000000" title="Text Color">
+    </div>
+    <div class="color-pick">
+      <label title="Fill Color"><i class="fas fa-fill-drip"></i></label>
+      <input type="color" id="fillColor" value="#4285f4" title="Fill Color">
+    </div>
+    <div class="color-pick">
+      <label title="Border Color"><i class="fas fa-border-style"></i></label>
+      <input type="color" id="borderColor" value="#333333" title="Border Color">
+    </div>
+    <div class="toolbar-sep"></div>
+    <select id="textAlign" title="Text Align">
+      <option value="left">Left</option>
+      <option value="center">Center</option>
+      <option value="right">Right</option>
+    </select>
+    <div class="toolbar-sep"></div>
+    <button id="bringFrontBtn" class="fmt-btn" title="Bring to Front"><i class="fas fa-layer-group"></i></button>
+    <button id="sendBackBtn" class="fmt-btn" title="Send to Back"><i class="fas fa-layer-group fa-flip-vertical"></i></button>
+    <button id="deleteElementBtn" class="fmt-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="appBody">
+    <!-- Slide Panel (left sidebar) -->
+    <aside id="slidePanel">
+      <div id="slideList"></div>
+      <button id="addSlideBtn" class="add-slide-btn" title="Add Slide"><i class="fas fa-plus"></i></button>
+    </aside>
+
+    <!-- Canvas Area -->
+    <main id="canvasArea">
+      <div id="canvasWrapper">
+        <div id="slideCanvas" tabindex="0"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Side Menu -->
+  <div id="sideMenu" class="side-menu hidden">
+    <div class="side-menu-header">
+      <h3>Menu</h3>
+      <button id="closeMenuBtn" class="icon-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="side-menu-body">
+      <button id="newPresentationBtn"><i class="fas fa-file"></i> New Presentation</button>
+      <button id="savePresentationBtn"><i class="fas fa-save"></i> Save (JSON)</button>
+      <button id="loadPresentationBtn"><i class="fas fa-folder-open"></i> Load</button>
+      <button id="exportPdfBtn"><i class="fas fa-file-pdf"></i> Export Images</button>
+      <hr>
+      <button id="duplicateSlideBtn"><i class="fas fa-copy"></i> Duplicate Slide</button>
+      <button id="deleteSlideBtn"><i class="fas fa-trash"></i> Delete Slide</button>
+      <hr>
+      <button id="slideSettingsBtn"><i class="fas fa-cog"></i> Slide Background</button>
+      <button id="gridToggleBtn"><i class="fas fa-th"></i> Toggle Grid</button>
+      <button id="snapToggleBtn"><i class="fas fa-magnet"></i> Toggle Snap</button>
+    </div>
+  </div>
+  <div id="sideMenuOverlay" class="side-menu-overlay hidden"></div>
+
+  <!-- Slide Size Modal -->
+  <div id="slideSizeModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Slide Size</h3>
+      <div class="modal-body">
+        <label>Preset:</label>
+        <select id="slideSizePreset">
+          <option value="16:9" selected>Widescreen (16:9)</option>
+          <option value="4:3">Standard (4:3)</option>
+          <option value="1:1">Square (1:1)</option>
+          <option value="9:16">Portrait (9:16)</option>
+          <option value="custom">Custom</option>
+        </select>
+        <div id="customSizeFields" class="hidden">
+          <label>Width (px): <input type="number" id="customWidth" value="960" min="200" max="3840"></label>
+          <label>Height (px): <input type="number" id="customHeight" value="540" min="200" max="2160"></label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('slideSizeModal').classList.add('hidden')">Cancel</button>
+        <button id="applySizeBtn" class="btn-primary">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Size Modal -->
+  <div id="tableSizeModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Insert Table</h3>
+      <div class="modal-body">
+        <label>Rows: <input type="number" id="tableRows" value="3" min="1" max="20"></label>
+        <label>Columns: <input type="number" id="tableCols" value="3" min="1" max="10"></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('tableSizeModal').classList.add('hidden')">Cancel</button>
+        <button id="insertTableBtn" class="btn-primary">Insert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link Modal -->
+  <div id="linkModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Insert Link</h3>
+      <div class="modal-body">
+        <label>Text: <input type="text" id="linkText" placeholder="Link text"></label>
+        <label>URL: <input type="url" id="linkUrl" placeholder="https://..."></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('linkModal').classList.add('hidden')">Cancel</button>
+        <button id="insertLinkBtn" class="btn-primary">Insert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GIF Modal -->
+  <div id="gifModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Insert GIF</h3>
+      <div class="modal-body">
+        <label>GIF URL: <input type="url" id="gifUrl" placeholder="https://media.giphy.com/..."></label>
+        <p class="hint">Paste a direct GIF URL (e.g., from Giphy)</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('gifModal').classList.add('hidden')">Cancel</button>
+        <button id="insertGifBtn" class="btn-primary">Insert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Modal -->
+  <div id="bgModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Slide Background</h3>
+      <div class="modal-body">
+        <label>Color: <input type="color" id="bgColor" value="#ffffff"></label>
+        <label>Image URL: <input type="url" id="bgImage" placeholder="https://..."></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('bgModal').classList.add('hidden')">Cancel</button>
+        <button id="applyBgBtn" class="btn-primary">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Presentation Mode -->
+  <div id="presentationMode" class="presentation-mode hidden">
+    <div id="presentSlide"></div>
+    <button id="exitPresentation" class="exit-present-btn"><i class="fas fa-times"></i></button>
+    <div class="present-nav">
+      <button id="prevSlideBtn"><i class="fas fa-chevron-left"></i></button>
+      <span id="slideCounter">1 / 1</span>
+      <button id="nextSlideBtn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <input type="file" id="imageInput" accept="image/*" class="hidden">
+  <input type="file" id="loadInput" accept=".json" class="hidden">
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>
